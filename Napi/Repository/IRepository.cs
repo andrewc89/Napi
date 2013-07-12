@@ -5,7 +5,7 @@ using Napi.Models.Interfaces;
 namespace Napi.Repository
 {
     public interface IRepository<ModelType, IDType>
-        where ModelType : INapiModel <IDType>, new()
+        where ModelType : INapiModel<IDType>, new()
         where IDType : IComparable
     {
         IEnumerable<ModelType> All ();

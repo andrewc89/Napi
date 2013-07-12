@@ -52,16 +52,38 @@ namespace Napi.Modules
         /// </summary>
         private void SetupRoutes ()
         {
+            _GetAll();
+            _GetSingle();
+            _Post();
+            _Put();
+            _Patch();
+            _Delete();
+        }
+
+        #region Get
+
+        public virtual void _GetAll ()
+        {
             Get["/" + ModelName] = Params =>
             {
                 return Json<ModelType>(Repository.All().Cast<INapiModel<IDType>>());
             };
+        }
 
+        public virtual void _GetSingle ()
+        {
             Get["/" + ModelName + "/{ModelID}"] = Params =>
             {
                 return Json<ModelType>(Repository.Get((IDType)Params.ModelID));
             };
+        }
 
+        #endregion
+
+        #region Post
+
+        public virtual void _Post ()
+        {
             Post["/" + ModelName] = Params =>
             {
                 return Try(() =>
@@ -75,7 +97,14 @@ namespace Napi.Modules
                     return Json<ModelType>(Models.Cast<INapiModel<IDType>>());
                 });
             };
+        }
 
+        #endregion
+
+        #region Put
+
+        public virtual void _Put ()
+        {
             Put["/" + ModelName + "/{ModelID}"] = Params =>
             {
                 return Try(() =>
@@ -86,12 +115,26 @@ namespace Napi.Modules
                     return Json<ModelType>(Model);
                 });
             };
+        }
 
+        #endregion
+
+        #region Patch
+
+        public virtual void _Patch ()
+        {
             Patch["/" + ModelName + "/{ModelID}"] = Params =>
             {
                 return Error("Not yet implemented");
             };
+        }
 
+        #endregion
+
+        #region Delete
+
+        public virtual void _Delete ()
+        {
             Delete["/" + ModelName + "/{ModelID}"] = Params =>
             {
                 return Try(() =>
@@ -101,6 +144,8 @@ namespace Napi.Modules
                 });
             };
         }
+
+        #endregion
 
         #endregion
 

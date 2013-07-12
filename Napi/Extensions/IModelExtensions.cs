@@ -10,7 +10,7 @@ namespace Napi.Extensions
 {
     public static class IModelExtensions
     {
-        public static string ToJson <ModelType, IDType> (this INapiModel<IDType> Model, string[] Fields, string[] Embed)
+        public static string ToJson<ModelType, IDType> (this INapiModel<IDType> Model, string[] Fields, string[] Embed)
             where ModelType : INapiModel<IDType>
             where IDType : IComparable
         {
@@ -31,7 +31,7 @@ namespace Napi.Extensions
             return Model.ToExpando(typeof(ModelType), Fields, Embed, Recurse);
         }
 
-        public static ExpandoObject ToExpando <IDType> (this INapiModel<IDType> Model, Type ModelType, string[] Fields, string[] Embed, bool Recurse = false)
+        public static ExpandoObject ToExpando<IDType> (this INapiModel<IDType> Model, Type ModelType, string[] Fields, string[] Embed, bool Recurse = false)
             where IDType : IComparable
         {
             var ReturnValue = new ExpandoObject();
