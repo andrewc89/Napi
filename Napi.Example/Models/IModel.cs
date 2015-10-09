@@ -1,8 +1,11 @@
-﻿using Napi.Models.Interfaces;
+﻿using System.Collections.Generic;
+using Napi.Example.Repository;
+using Napi.Models;
+using Napi.Models.Interfaces;
 
 namespace Napi.Example.Models
 {
-    public abstract class IModel : INapiModel<long>
+    public abstract class IModel<ModelType> : INapiModel<long>
     {
         public long ID { get; set; }
         public bool Active { get; set; }

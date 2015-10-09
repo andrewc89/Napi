@@ -5,13 +5,14 @@ using System.Text;
 using Nancy;
 using Nancy.ModelBinding;
 using Napi.Extensions;
+using Napi.Models;
 using Napi.Models.Interfaces;
 using Napi.Repository;
 
 namespace Napi.Modules
 {
     public abstract class BaseModule<ModelType, IDType> : NancyModule
-        where ModelType : INapiModel<IDType>, new()
+        where ModelType : INapiModel<IDType>
         where IDType : IComparable
     {
         #region Properties
@@ -265,8 +266,8 @@ namespace Napi.Modules
         /// </summary>
         /// <param name="Model">model to convert</param>
         /// <returns>Nancy.Response</returns>
-        protected Response Json<ModelType> (INapiModel<IDType> Model)
-            where ModelType : INapiModel<IDType>
+        protected Response Json<JsonModelType> (INapiModel<IDType> Model)
+            where JsonModelType : INapiModel<IDType>
         {
             return Json(Model.ToJson<ModelType, IDType>(ParseFields(), ParseEmbed()));
         }
@@ -276,8 +277,8 @@ namespace Napi.Modules
         /// </summary>
         /// <param name="Models">IEnumerable of models</param>
         /// <returns>Nancy.Response</returns>
-        protected Response Json<ModelType> (IEnumerable<INapiModel<IDType>> Models)
-            where ModelType : INapiModel<IDType>
+        protected Response Json<JsonModelType> (IEnumerable<INapiModel<IDType>> Models)
+            where JsonModelType : INapiModel<IDType>
         {
             return Json(Models.ToJson<ModelType, IDType>(ParseFields(), ParseEmbed()));
         }
