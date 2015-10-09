@@ -21,7 +21,7 @@ namespace Napi.Extensions
             where ModelType : INapiModel<IDType>
             where IDType : IComparable
         {
-            return List.Select<INapiModel<IDType>, ExpandoObject>(x => x.ToExpando<ModelType, IDType>(Fields, Embed)).FlattenList();
+            return List.Select(x => x.ToExpando<ModelType, IDType>(Fields, Embed)).FlattenList();
         }
 
         public static ExpandoObject ToExpando<ModelType, IDType> (this INapiModel<IDType> Model, string[] Fields, string[] Embed, bool Recurse = false)
@@ -41,16 +41,16 @@ namespace Napi.Extensions
                 string PropertyName = Property.Name.ToLower();
                 if (Fields.Count() == 0 || Fields.Contains(PropertyName))
                 {
-                    ((ICollection<KeyValuePair<String, Object>>)ReturnValue).Add(
+                    ((ICollection<KeyValuePair<string, object>>)ReturnValue).Add(
                     (Property.CanRead
                         && (Property.PropertyType.IsPrimitive
                             || new List<Type> { typeof(string), typeof(DateTime), typeof(Guid), typeof(DateTimeOffset) }.Contains(Property.PropertyType)))
-                    ? new KeyValuePair<string, object>(Property.Name, Model.GetProperty<IDType>(Property))
+                    ? new KeyValuePair<string, object>(Property.Name, Model.GetProperty(Property))
                     : new KeyValuePair<string, object>(Property.Name, Embed.Contains(PropertyName)
                         ? (Property.PropertyType.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>))
-                            ? (object)((IEnumerable<INapiModel<IDType>>)Model.GetProperty<IDType>(Property)).Select(y => y.ToExpando<IDType>(Property.PropertyType.GetGenericArguments()[0], EmptyArray, EmptyArray))
-                            : (object)((INapiModel<IDType>)Model.GetProperty<IDType>(Property)).ToExpando<IDType>(Property.PropertyType, EmptyArray, EmptyArray))
-                        : HttpContext.Current.AbsoluteRoot() + "API/v1/" + ModelType.Name + "s/" + Model.ID + "/" + Property.Name));
+                            ? ((IEnumerable<INapiModel<IDType>>)Model.GetProperty(Property)).Select(y => y.ToExpando(Property.PropertyType.GetGenericArguments()[0], EmptyArray, EmptyArray))
+                            : (object)((INapiModel<IDType>)Model.GetProperty(Property)).ToExpando(Property.PropertyType, EmptyArray, EmptyArray))
+                        : HttpContext.Current.AbsoluteRoot() + "API/" + ModelType.Name + "/" + Model.ID + "/" + Property.Name));
                 }
             }
             return ReturnValue;

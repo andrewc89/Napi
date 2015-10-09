@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Napi.Example.Models;
+﻿using Napi.Example.Models;
+using Napi.Example.Repository;
 
 namespace Napi.Example.Modules
 {
@@ -11,6 +8,7 @@ namespace Napi.Example.Modules
         public EventModule()
             : base("Event")
         {
+            Repository = new EventRepository();
         }
     }
 }

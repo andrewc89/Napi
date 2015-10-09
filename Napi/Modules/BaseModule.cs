@@ -5,7 +5,6 @@ using System.Text;
 using Nancy;
 using Nancy.ModelBinding;
 using Napi.Extensions;
-using Napi.Models;
 using Napi.Models.Interfaces;
 using Napi.Repository;
 
@@ -38,10 +37,11 @@ namespace Napi.Modules
         /// </summary>
         /// <param name="Route">base nancy route</param>
         /// <param name="ModelName">model name used for url</param>
-        public BaseModule (string Route, string ModelName)
+        public BaseModule (string Route, string ModelName, params string[] Blacklisted)
             : base(Route)
         {
             this.ModelName = ModelName;
+            BlacklistedProperties = Blacklisted;
             SetupRoutes();
         }
 

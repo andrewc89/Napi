@@ -2,7 +2,7 @@
 
 namespace Napi.Example.Models
 {
-    public class Event : IModel<Event>
+    public class Event : BaseModel<Event>
     {
         public DateTime DateTime { get; set; }
     }
