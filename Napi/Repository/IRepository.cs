@@ -5,7 +5,7 @@ using Napi.Models.Interfaces;
 namespace Napi.Repository
 {
     public interface IRepository<ModelType, IDType>
-        where ModelType : INapiModel<IDType>, new()
+        where ModelType : INapiModel<IDType>
         where IDType : IComparable
     {
         IEnumerable<ModelType> All ();
@@ -17,7 +17,5 @@ namespace Napi.Repository
         ModelType Update (ModelType Model);
 
         bool Delete (IDType ID);
-
-        bool Delete (ModelType Model);
     }
 }

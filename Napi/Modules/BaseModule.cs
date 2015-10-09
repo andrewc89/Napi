@@ -35,6 +35,7 @@ namespace Napi.Modules
         /// <summary>
         /// setup Repository, ModelName, routes
         /// </summary>
+        /// <param name="Route">base nancy route</param>
         /// <param name="ModelName">model name used for url</param>
         public BaseModule (string Route, string ModelName)
             : base(Route)

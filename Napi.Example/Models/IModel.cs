@@ -2,9 +2,15 @@
 
 namespace Napi.Example.Models
 {
-    internal interface IModel : INapiModel<long>
+    public abstract class IModel : INapiModel<long>
     {
-        public long ID;
-        public bool Active;
+        public long ID { get; set; }
+        public bool Active { get; set; }
+        public string DisplayName { get; set; }
+
+        public override string ToString()
+        {
+            return DisplayName;
+        }
     }
 }

@@ -1,12 +1,10 @@
-﻿namespace Napi.Example.Models.Venues
+﻿using System;
+
+namespace Napi.Example.Models.Venues
 {
     public class Event : IModel
     {
-        public string DisplayName { get; set; }
-
-        public override string ToString ()
-        {
-            return DisplayName;
-        }
+        public long VenueID { get; set; }
+        public DateTime DateTime { get; set; }
     }
 }
