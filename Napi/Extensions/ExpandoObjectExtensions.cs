@@ -21,19 +21,19 @@ namespace Napi.Extensions
                 string Content;
                 if (ValueType.IsGenericType)
                 {
-                    Content = String.Format("\"{0}\":{1}", Key, FlattenList((IEnumerable<ExpandoObject>)Pair.Value));
+                    Content = string.Format("\"{0}\":{1}", Key, FlattenList((IEnumerable<ExpandoObject>)Pair.Value));
                 }
                 else if (ValueType == typeof(ExpandoObject))
                 {
-                    Content = String.Format("\"{0}\":{1}", Key, Flatten((ExpandoObject)Pair.Value));
+                    Content = string.Format("\"{0}\":{1}", Key, Flatten((ExpandoObject)Pair.Value));
                 }
                 else
                 {
-                    Content = String.Format("\"{0}\":\"{1}\"", Key, JsonConvert.SerializeObject(Pair.Value).Replace("\"", "").Replace("\\", "\'"));
+                    Content = string.Format("\"{0}\":\"{1}\"", Key, JsonConvert.SerializeObject(Pair.Value).Replace("\"", "").Replace("\\", "\'"));
                 }
                 Contents.Add(Content);
             }
-            Builder.Append(String.Join(",", Contents.ToArray()));
+            Builder.Append(string.Join(",", Contents.ToArray()));
             Builder.Append("}");
             return Builder.ToString();
         }

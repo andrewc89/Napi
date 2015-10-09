@@ -10,28 +10,28 @@ namespace Napi.Extensions
 {
     public static class IModelExtensions
     {
-        public static string ToJson<ModelType, IDType> (this INapiModel<IDType> Model, string[] Fields, string[] Embed)
+        public static string ToJson<ModelType, IDType> (this INapiModel<IDType> Model, string Route, string[] Fields, string[] Embed)
             where ModelType : INapiModel<IDType>
             where IDType : IComparable
         {
-            return Model.ToExpando<ModelType, IDType>(Fields, Embed, true).Flatten();
+            return Model.ToExpando<ModelType, IDType>(Route, Fields, Embed, true).Flatten();
         }
 
-        public static string ToJson<ModelType, IDType> (this IEnumerable<INapiModel<IDType>> List, string[] Fields, string[] Embed)
+        public static string ToJson<ModelType, IDType> (this IEnumerable<INapiModel<IDType>> List, string Route, string[] Fields, string[] Embed)
             where ModelType : INapiModel<IDType>
             where IDType : IComparable
         {
-            return List.Select(x => x.ToExpando<ModelType, IDType>(Fields, Embed)).FlattenList();
+            return List.Select(x => x.ToExpando<ModelType, IDType>(Route, Fields, Embed)).FlattenList();
         }
 
-        public static ExpandoObject ToExpando<ModelType, IDType> (this INapiModel<IDType> Model, string[] Fields, string[] Embed, bool Recurse = false)
+        public static ExpandoObject ToExpando<ModelType, IDType> (this INapiModel<IDType> Model, string Route, string[] Fields, string[] Embed, bool Recurse = false)
             where ModelType : INapiModel<IDType>
             where IDType : IComparable
         {
-            return Model.ToExpando(typeof(ModelType), Fields, Embed, Recurse);
+            return Model.ToExpando(typeof(ModelType), Route, Fields, Embed, Recurse);
         }
 
-        public static ExpandoObject ToExpando<IDType> (this INapiModel<IDType> Model, Type ModelType, string[] Fields, string[] Embed, bool Recurse = false)
+        public static ExpandoObject ToExpando<IDType> (this INapiModel<IDType> Model, Type ModelType, string Route, string[] Fields, string[] Embed, bool Recurse = false)
             where IDType : IComparable
         {
             var ReturnValue = new ExpandoObject();
@@ -48,9 +48,9 @@ namespace Napi.Extensions
                     ? new KeyValuePair<string, object>(Property.Name, Model.GetProperty(Property))
                     : new KeyValuePair<string, object>(Property.Name, Embed.Contains(PropertyName)
                         ? (Property.PropertyType.GetInterfaces().Any(x => x.IsGenericType && x.GetGenericTypeDefinition() == typeof(IEnumerable<>))
-                            ? ((IEnumerable<INapiModel<IDType>>)Model.GetProperty(Property)).Select(y => y.ToExpando(Property.PropertyType.GetGenericArguments()[0], EmptyArray, EmptyArray))
-                            : (object)((INapiModel<IDType>)Model.GetProperty(Property)).ToExpando(Property.PropertyType, EmptyArray, EmptyArray))
-                        : HttpContext.Current.AbsoluteRoot() + "API/" + ModelType.Name + "/" + Model.ID + "/" + Property.Name));
+                            ? ((IEnumerable<INapiModel<IDType>>)Model.GetProperty(Property)).Select(y => y.ToExpando(Property.PropertyType.GetGenericArguments()[0], Route, EmptyArray, EmptyArray))
+                            : (object)((INapiModel<IDType>)Model.GetProperty(Property)).ToExpando(Property.PropertyType, Route, EmptyArray, EmptyArray))
+                        : HttpContext.Current.AbsoluteRoot() + Route.Skip(1).ToString() + "/" + Model.ID + "/" + Property.Name));
                 }
             }
             return ReturnValue;

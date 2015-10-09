@@ -17,14 +17,19 @@ namespace Napi.Modules
         #region Properties
 
         /// <summary>
-        /// blacklisted properties that should not be updated/set via the API
+        /// route as string
         /// </summary>
-        protected static string[] BlacklistedProperties;
+        protected string Route;
 
         /// <summary>
         /// model name used for url
         /// </summary>
         protected string ModelName;
+
+        /// <summary>
+        /// blacklisted properties that should not be updated/set via the API
+        /// </summary>
+        protected string[] BlacklistedProperties;
 
         protected IRepository<ModelType, IDType> Repository;
 
@@ -37,11 +42,13 @@ namespace Napi.Modules
         /// </summary>
         /// <param name="Route">base nancy route</param>
         /// <param name="ModelName">model name used for url</param>
+        /// <param name="Blacklisted">blacklisted properties</param>
         public BaseModule (string Route, string ModelName, params string[] Blacklisted)
             : base(Route)
         {
+            this.Route = Route;
             this.ModelName = ModelName;
-            BlacklistedProperties = Blacklisted;
+            this.BlacklistedProperties = Blacklisted;
             SetupRoutes();
         }
 
@@ -269,7 +276,7 @@ namespace Napi.Modules
         protected Response Json<JsonModelType> (INapiModel<IDType> Model)
             where JsonModelType : INapiModel<IDType>
         {
-            return Json(Model.ToJson<ModelType, IDType>(ParseFields(), ParseEmbed()));
+            return Json(Model.ToJson<ModelType, IDType>(Route, ParseFields(), ParseEmbed()));
         }
 
         /// <summary>
@@ -280,7 +287,7 @@ namespace Napi.Modules
         protected Response Json<JsonModelType> (IEnumerable<INapiModel<IDType>> Models)
             where JsonModelType : INapiModel<IDType>
         {
-            return Json(Models.ToJson<ModelType, IDType>(ParseFields(), ParseEmbed()));
+            return Json(Models.ToJson<ModelType, IDType>(Route, ParseFields(), ParseEmbed()));
         }
 
         #endregion
